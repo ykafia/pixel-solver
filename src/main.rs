@@ -14,10 +14,7 @@ fn main() {
     // println!("{}",val);
 
     let mut sprite = Sprite::new_square_5();
-    // sprite.fill_line_with(4, vec![1,2].to_padded_bits(),false);
-    sprite.fill_line_with(0, vec![1].to_padded_bits(), true);
-    // sprite.fill_line(2);
-    // sprite.fill_line(3);
+    sprite.solve();
     println!("{sprite}");
     println!("{}", sprite.check_c_constraint(0));
 }
