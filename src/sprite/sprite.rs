@@ -14,7 +14,7 @@ pub enum Direction {
 }
 
 impl SpriteSize {
-    fn val(&self) -> u32 {
+    pub fn val(&self) -> u32 {
         match self {
             Self::PX5 => 5,
             Self::PX10 => 5,
@@ -24,48 +24,20 @@ impl SpriteSize {
 }
 
 pub struct Sprite {
-    lines: [u16; 16],
-    mask: [u16; 16],
-    size: SpriteSize,
-    l_constraints: Vec<Vec<u32>>,
-    c_constraints: Vec<Vec<u32>>,
+    pub lines: [u16; 16],
+    pub mask: [u16; 16],
+    pub size: SpriteSize,
+    pub l_constraints: Vec<Vec<u32>>,
+    pub c_constraints: Vec<Vec<u32>>,
 }
 
 impl Sprite {
-    pub fn new(
-        size: SpriteSize,
-        l_constraints: Vec<Vec<u32>>,
-        c_constraints: Vec<Vec<u32>>,
-    ) -> Self {
-        Sprite {
-            lines: [0; 16],
-            mask: [0; 16],
-            size,
-            l_constraints,
-            c_constraints,
-        }
-    }
+    
     pub fn get(&self, x: usize, y: usize) -> u16 {
         self.lines[x] & 1 << y
     }
     pub fn fill(&mut self, x: usize, y: usize) {
         self.lines[x] |= 1 << 15 - y
-    }
-
-    pub fn solve(&mut self) {
-        self.solve_full();
-    }
-    pub fn solve_full(&mut self) {
-        let size = self.size.val();
-        for x in 0..size {
-            if self.l_constraints[x as usize].is_full(size) {
-                self.fill_line_with(x as usize, self.l_constraints[x as usize].to_padded_bits(), true);
-            }
-            if self.c_constraints[x as usize].is_full(size) {
-                self.fill_column_with(x as usize, self.l_constraints[x as usize].to_padded_bits(), true);
-            }
-        }
-        
     }
 
     pub fn check_constraints(&self) -> bool {
