@@ -39,6 +39,12 @@ impl Sprite {
     pub fn fill(&mut self, x: usize, y: usize) {
         self.lines[x] |= 1 << 15 - y
     }
+    pub fn get_mask(&self, x: usize, y: usize) -> u16 {
+        self.mask[x] & 1 << y
+    }
+    pub fn fill_mask(&mut self, x: usize, y: usize) {
+        self.mask[x] |= 1 << 15 - y
+    }
 
     pub fn check_constraints(&self) -> bool {
         (0..self.size.val())
