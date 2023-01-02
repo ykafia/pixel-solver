@@ -128,15 +128,7 @@ impl Sprite {
         }
     }
 
-    pub fn new_square_5() -> Self {
-        Sprite {
-            lines: [0; 16],
-            mask: [0; 16],
-            size: SpriteSize::PX5,
-            l_constraints: vec![vec![1], vec![3], vec![5], vec![5], vec![3]],
-            c_constraints: vec![vec![1, 2], vec![4], vec![4], vec![4], vec![2]],
-        }
-    }
+    
 }
 
 impl fmt::Display for Sprite {
@@ -152,15 +144,25 @@ impl fmt::Display for Sprite {
         );
         s.push('\n');
         for x in 0..self.size.val() {
-            let mut line = format!("{:016b}", self.lines[x as usize])
-                .split_at((self.size.val() + 1) as usize)
-                .0
-                .to_string()
-                .replace("0", " ░░")
-                .replace("1", " ██");
-            line.pop();
-            line.pop();
-            s.push_str(format!("{:2}{}\n\n", x + 1, line).as_str());
+            // let mut line = format!("{:016b}", self.lines[x as usize])
+            //     .split_at((self.size.val() + 1) as usize)
+            //     .0
+            //     .to_string()
+            //     .replace("0", " ░░")
+            //     .replace("1", " ██");
+            // line.pop();
+            // line.pop();
+            let mut res = String::new();
+            for y in 0..self.size.val() {
+                if self.mask[x as usize] >> 15 - y & 1 != 0 {
+                    res.push_str(" ╳╳");
+                } else if self.lines[x as usize] >> 15 - y & 1 != 0 {
+                    res.push_str(" ██");
+                }else if self.lines[x as usize] >> 15 - y & 1 == 0 {
+                    res.push_str(" ░░");
+                }
+            }
+            s.push_str(format!("{:2}{}\n\n", x + 1, res).as_str());
         }
         write!(f, "{s}")
     }
